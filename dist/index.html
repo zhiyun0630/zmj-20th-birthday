@@ -3,83 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Happy 20th Birthday ♡">
-    <meta name="theme-color" content="#ff9a9e">
-    <title>Happy 20th Birthday ♡</title>
+    <meta name="description" content="敏君的 20 岁生日惊喜">
+    <meta name="theme-color" content="#ff7eb3">
+    <title>敏君，20 岁生日快乐 ♡</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
 </head>
 <body>
-
-<div class="stars" id="stars"></div>
+<div class="aurora" aria-hidden="true"></div>
+<canvas id="sparkCanvas" aria-hidden="true"></canvas>
+<div class="floating-hearts" id="floatingHearts" aria-hidden="true"></div>
 <div class="toast" id="toast"></div>
 
-<!-- 信封入场 -->
-<div class="envelope-wrap" id="envelopeWrap">
-    <div class="envelope" id="envelope" role="button" aria-label="拆开信封">
-        <div class="envelope-flap"></div>
-        <div class="envelope-body">
-            <p>致 20 岁的你 ♡</p>
-            <span>点击拆开信封</span>
-        </div>
-    </div>
+<div class="intro" id="intro">
+    <button class="love-card" id="openCard" aria-label="打开生日惊喜">
+        <span class="card-shine"></span>
+        <span class="card-bow"></span>
+        <span class="card-title">致 20 岁的敏君 ♡</span>
+        <span class="card-name">To 敏君</span>
+        <span class="card-tip">点击开启属于你的二十岁宇宙</span>
+    </button>
 </div>
 
-<div id="mainContent" style="opacity:0; transition:opacity 1s ease 0.5s;">
-
-    <!-- 主标题 -->
-    <section class="section">
-        <div class="reveal eng-handwrite" style="font-size:clamp(2.5rem,8vw,4.5rem); color:white; text-shadow:0 2px 12px rgba(0,0,0,0.15); margin-bottom:1rem;">
-            Happy 20th Birthday
+<main id="mainContent" class="main-content">
+    <section class="section hero-section" id="hero">
+        <div class="hero-orbit" aria-hidden="true">
+            <span></span><span></span><span></span><span></span>
         </div>
-        <h1 class="reveal handwrite" style="font-size:clamp(1.8rem,6vw,3rem); color:#e64980; margin:0 0 1.5rem; transition-delay:0.15s;">
-            亲爱的某某：
+        <p class="reveal overline">Since 2023.11.23</p>
+        <h1 class="reveal hero-title">
+            <span class="eng-handwrite">Happy 20th Birthday</span>
+            <strong class="handwrite">敏君</strong>
         </h1>
-        <p class="reveal" style="font-size:1.1rem; color:rgba(214,51,108,0.85); text-align:center; max-width:28rem; line-height:1.8; transition-delay:0.3s;">
-            欢迎来到属于你的二十岁世界<br>慢慢往下滑，有我准备的惊喜
-        </p>
-        <div class="reveal days-badge" style="transition-delay:0.45s;">
-            我们已经在一起 <strong id="daysCounter">0</strong> 天啦 ♡
+        <p class="reveal hero-copy">欢迎来到敏君的二十岁生日宇宙<br>我把想说的话、一起走过的时间、还有未来的浪漫，都藏进了这里。</p>
+        <div class="reveal hero-actions">
+            <a href="#cake" class="primary-btn">先去许愿</a>
+            <button class="ghost-btn" id="surpriseBtn">撒一场星光</button>
         </div>
-        <div class="scroll-hint">↓</div>
+        <div class="reveal memory-panel">
+            <div>
+                <span id="daysCounter">0</span>
+                <small>天相识相伴</small>
+            </div>
+            <div>
+                <span>10</span>
+                <small>张照片位置</small>
+            </div>
+            <div>
+                <span>20</span>
+                <small>岁的你闪闪发光</small>
+            </div>
+        </div>
+        <a href="#story" class="scroll-hint" aria-label="继续向下">Scroll</a>
     </section>
 
-    <!-- 时间线 -->
-    <section class="section">
-        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">我们的故事</h2>
-        <p class="reveal" style="color:rgba(214,51,108,0.7); margin-bottom:0; transition-delay:0.1s;">每一个与你有关的日子，都闪闪发光</p>
-
-        <div class="timeline reveal" style="transition-delay:0.2s;">
-            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2023.09.10</div><div class="timeline-text">第一次遇见你</div></div>
-            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2023.11.25</div><div class="timeline-text">我们在一起了</div></div>
-            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2024.05.20</div><div class="timeline-text">第一次旅行</div></div>
-            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2025.01.01</div><div class="timeline-text">一起跨年</div></div>
+    <section class="section story-section" id="story">
+        <div class="section-heading reveal">
+            <p class="overline">Our Timeline</p>
+            <h2 class="handwrite">我们的故事</h2>
+            <span>从 2023 年 11 月 23 日开始，每一天都因为你变得具体又温柔。</span>
         </div>
-        <div class="timeline-detail reveal" id="timelineDetail" style="transition-delay:0.3s;"></div>
+        <div class="timeline reveal">
+            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2023.11.23</div><div class="timeline-text">我们相识了</div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2024.05.20</div><div class="timeline-text">把喜欢说得更认真</div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2025.11.23</div><div class="timeline-text">又一年有你</div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2026.生日</div><div class="timeline-text">二十岁的敏君</div></div>
+        </div>
+        <article class="timeline-detail reveal" id="timelineDetail"></article>
     </section>
 
-    <!-- 照片墙 -->
-    <section class="section">
-        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">我们的瞬间</h2>
-        <p class="reveal" style="color:rgba(214,51,108,0.7); margin-bottom:0; transition-delay:0.1s;">左右滑动，回顾那些美好</p>
-        <div class="photo-scroll reveal" style="transition-delay:0.2s;">
-            <div class="photo-card"><img src="assets/photos/photo1.jpg" alt="我们的第一张合照" loading="lazy"><p>我们的第一张合照</p></div>
-            <div class="photo-card"><img src="assets/photos/photo2.jpg" alt="一起看过的日落" loading="lazy"><p>一起看过的日落</p></div>
-            <div class="photo-card"><img src="assets/photos/photo3.jpg" alt="最日常也最珍贵的瞬间" loading="lazy"><p>最日常也最珍贵的瞬间</p></div>
+    <section class="section gallery-section" id="gallery">
+        <div class="section-heading reveal">
+            <p class="overline">Photo Gallery</p>
+            <h2 class="handwrite">十个心动瞬间</h2>
+            <span>我先预留了 10 张照片的位置，把图片放进 assets/photos 后就能替换。</span>
         </div>
+        <div class="gallery-shell reveal">
+            <button class="gallery-nav prev" id="photoPrev" aria-label="上一张照片">‹</button>
+            <div class="photo-stage" id="photoStage">
+                <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23ffd6e7' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 1%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 01 · 初见心动" loading="lazy"><p>照片 01 · 初见心动</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23ffc2d1' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 2%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 02 · 和你一起" loading="lazy"><p>照片 02 · 和你一起</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23ffd9a1' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 3%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 03 · 普通日子也发光" loading="lazy"><p>照片 03 · 普通日子也发光</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23f7d6ff' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 4%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 04 · 笑起来的敏君" loading="lazy"><p>照片 04 · 笑起来的敏君</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23c8f1ff' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 5%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 05 · 收藏这一刻" loading="lazy"><p>照片 05 · 收藏这一刻</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23ffd6e7' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 6%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 06 · 一起看世界" loading="lazy"><p>照片 06 · 一起看世界</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23ffc2d1' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 7%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 07 · 今天也喜欢你" loading="lazy"><p>照片 07 · 今天也喜欢你</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23ffd9a1' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 8%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 08 · 浪漫存档" loading="lazy"><p>照片 08 · 浪漫存档</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23f7d6ff' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 9%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 09 · 未来还有很多张" loading="lazy"><p>照片 09 · 未来还有很多张</p></div>
+            <div class="photo-card"><img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='280' viewBox='0 0 220 280'%3E%3Crect fill='%23c8f1ff' width='220' height='280'/%3E%3Ccircle cx='110' cy='96' r='34' fill='rgba(255,255,255,0.38)'/%3E%3Cpath d='M48 210 C72 168, 90 166, 110 190 C130 214, 154 172, 172 184 L172 280 L48 280 Z' fill='rgba(255,255,255,0.5)'/%3E%3Ctext x='50%25' y='50%25' fill='white' font-size='20' font-weight='700' text-anchor='middle' dy='.35em'%3E照片 10%3C/text%3E%3Ctext x='50%25' y='72%25' fill='white' font-size='12' text-anchor='middle' dy='.35em'%3E替换为你的照片%3C/text%3E%3C/svg%3E" alt="照片 10 · 二十岁快乐" loading="lazy"><p>照片 10 · 二十岁快乐</p></div>
+            </div>
+            <button class="gallery-nav next" id="photoNext" aria-label="下一张照片">›</button>
+        </div>
+        <div class="photo-dots reveal" id="photoDots"></div>
     </section>
 
-    <!-- 生日蛋糕 -->
-    <section class="section">
-        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">许下心愿吧</h2>
-        <p class="reveal" style="color:rgba(214,51,108,0.7); transition-delay:0.1s;">点击蜡烛，一根根吹灭它们 ✨</p>
-        <p class="reveal" style="font-size:0.875rem; color:rgba(214,51,108,0.5); margin:0.5rem 0 1.5rem; transition-delay:0.15s;" id="candleTip">
-            剩余蜡烛：<span id="candleCount">20</span> 根
-        </p>
-        <div class="cake reveal" style="transition-delay:0.2s;">
-            <div class="candles" id="candles"><div class="candle"><div class="flame"></div></div>
+    <section class="section cake-section" id="cake">
+        <div class="section-heading reveal">
+            <p class="overline">Make a Wish</p>
+            <h2 class="handwrite">敏君，许个愿吧</h2>
+            <span>闭上眼睛，点击按钮，一口气吹灭所有蜡烛。</span>
+        </div>
+        <div class="cake-scene reveal">
+            <div class="wish-cloud" id="wishCloud">愿你的 20 岁，被鲜花、星光和爱包围</div>
+            <div class="cake" id="cakeArt">
+                <div class="candles" id="candles"><div class="candle"><div class="flame"></div></div>
                 <div class="candle"><div class="flame"></div></div>
                 <div class="candle"><div class="flame"></div></div>
                 <div class="candle"><div class="flame"></div></div>
@@ -99,62 +128,68 @@
                 <div class="candle"><div class="flame"></div></div>
                 <div class="candle"><div class="flame"></div></div>
                 <div class="candle"><div class="flame"></div></div></div>
-            <div class="cake-top"></div>
-            <div class="cake-body"></div>
-        </div>
-    </section>
-
-    <!-- 情话盲盒 -->
-    <section class="section">
-        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">情话盲盒</h2>
-        <p class="reveal" style="color:rgba(214,51,108,0.7); margin-bottom:0; transition-delay:0.1s;">点开每一个盒子，都是我想对你说的话</p>
-        <div class="gift-grid reveal" style="transition-delay:0.2s;">
-            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">遇见你，是我最幸运的事</div></div></div>
-            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">想和你吃遍全世界的甜品</div></div></div>
-            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">你的二十岁，我奉陪到底</div></div></div>
-            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">你不用长高，我会弯腰</div></div></div>
-            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">岁岁年年，万喜万般宜</div></div></div>
-            <div class="gift-box"><div class="gift-inner"><div class="gift-front">💝</div><div class="gift-back">我爱你，不止今天</div></div></div>
-        </div>
-    </section>
-
-    <!-- 告白信 -->
-    <section class="section letter-section">
-        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 2rem;">写给二十岁的你</h2>
-        <div class="letter reveal" style="transition-delay:0.15s;">
-            <div class="letter-content handwrite">
-                <span id="typedText"></span><span class="cursor" id="cursor"></span>
+                <div class="cream cream-back"></div>
+                <div class="cake-layer layer-top">
+                    <i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <div class="cake-layer layer-middle"></div>
+                <div class="cake-layer layer-bottom"></div>
+                <div class="cake-plate"></div>
             </div>
+            <button class="blow-btn" id="blowAllBtn">一口气吹灭蜡烛</button>
+            <p class="candle-status" id="candleTip">等待敏君许愿中 · <span id="candleCount">20</span> 支蜡烛亮着</p>
         </div>
     </section>
 
-    <!-- 彩蛋 -->
-    <section class="section">
-        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">最后一个彩蛋</h2>
-        <p class="reveal" style="color:rgba(214,51,108,0.7); margin-bottom:1.5rem; transition-delay:0.1s;">输入我们的暗号，解锁隐藏惊喜</p>
-
-        <div class="secret-input-wrap reveal" style="transition-delay:0.2s;">
-            <input type="text" id="secretInput" placeholder="比如我们的纪念日..." autocomplete="off">
-            <button id="secretBtn">确认</button>
+    <section class="section gifts-section" id="gifts">
+        <div class="section-heading reveal">
+            <p class="overline">Love Boxes</p>
+            <h2 class="handwrite">情话盲盒</h2>
+            <span>点击翻开，每一张都是想送给你的今日限定甜。</span>
         </div>
+        <div class="gift-grid reveal">
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎀</div><div class="gift-back">敏君，二十岁的你一定会比今天的星光还耀眼。</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">💗</div><div class="gift-back">遇见你的那天，普通日期变成了我的纪念日。</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🌙</div><div class="gift-back">希望你睡前有好梦，醒来有期待，身边有我。</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🍓</div><div class="gift-back">想陪你吃很多甜品，也陪你走过很多四季。</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">✨</div><div class="gift-back">你可以永远做小朋友，烦恼都交给我处理。</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">💌</div><div class="gift-back">我喜欢你，不只在生日这一天，是每一天。</div></div></div>
+        </div>
+    </section>
 
+    <section class="section letter-section" id="letter">
+        <div class="section-heading reveal">
+            <p class="overline">A Letter</p>
+            <h2 class="handwrite">写给二十岁的敏君</h2>
+        </div>
+        <div class="letter reveal">
+            <div class="letter-stamp">20</div>
+            <div class="letter-content handwrite"><span id="typedText"></span><span class="cursor" id="cursor"></span></div>
+        </div>
+    </section>
+
+    <section class="section secret-section" id="secret">
+        <div class="section-heading reveal">
+            <p class="overline">Secret</p>
+            <h2 class="handwrite">最后一个隐藏惊喜</h2>
+            <span>输入我们的纪念日，解锁只属于你的彩蛋。</span>
+        </div>
+        <div class="secret-input-wrap reveal">
+            <input type="text" id="secretInput" placeholder="输入我们的相识日期，例如 20231123" autocomplete="off">
+            <button id="secretBtn">解锁</button>
+        </div>
         <div class="secret-reveal" id="secretReveal">
-            <p style="color:#e64980; font-size:1.1rem; margin:0;">🎉 恭喜你解锁专属惊喜！</p>
-            <p style="color:#555; margin:12px 0; line-height:1.7;">今晚 7 点，老地方见 —— 我准备了更多惊喜给你 ♡</p>
-            <img src="assets/photos/surprise.jpg" alt="专属惊喜" loading="lazy"
-                 onerror="this.style.display='none'">
+            <p class="secret-title">恭喜敏君解锁专属惊喜！</p>
+            <p>这份生日软件只是第一份礼物。接下来，我还想把更多真实的浪漫，亲手送到你面前。</p>
+            <img src="assets/photos/surprise.jpg" alt="专属惊喜" loading="lazy" onerror="this.style.display='none'">
         </div>
-
-        <div class="footer-text">♡ 二十岁生日快乐，愿你永远被爱 ♡</div>
+        <p class="footer-text">♡ 敏君，二十岁生日快乐。未来很长，我想一直陪你。 ♡</p>
     </section>
-
-</div>
+</main>
 
 <button class="music-btn" id="musicBtn" aria-label="播放音乐">🔇</button>
-
 <audio id="bgMusic" loop preload="none"></audio>
-
-<script>window.SITE_CONFIG = {"together_since": "2023-11-25", "letter": "亲爱的宝贝：\n\n展信佳。\n\n今天是你的二十岁生日，也是我陪你过的第 N 个生日。\n\n二十岁是很美好的年纪，有热烈的梦想，有未知的远方，而我最幸运的是，能站在你身边，陪你一起走。\n\n希望你永远快乐，永远勇敢，永远可以做最真实的自己。而我，会一直是你最坚实的后盾。\n\n生日快乐，我的女孩。\n\n爱你的某某\n2026 年 生日当天", "secret_code": "20231125", "bg_music": "", "birthday_song": "", "timeline": [{"date": "2023.09.10", "text": "第一次遇见你", "detail": "那天的阳光很好，而你更好。"}, {"date": "2023.11.25", "text": "我们在一起了", "detail": "从那天起，我的日历里多了无数个值得纪念的日子。"}, {"date": "2024.05.20", "text": "第一次旅行", "detail": "和你一起看过的风景，都成了心底最柔软的记忆。"}, {"date": "2025.01.01", "text": "一起跨年", "detail": "零点的那一秒，我许的愿望里都有你。"}]};</script>
+<script>window.SITE_CONFIG = {"together_since": "2023-11-23", "letter": "亲爱的敏君：\n\n二十岁生日快乐。\n\n从 2023 年 11 月 23 日认识你开始，我的生活里多了很多柔软又闪亮的瞬间。也许有些话平时说出来会害羞，所以我把它们写进这个小小的软件里，想让你慢慢看见。\n\n希望二十岁的你，继续漂亮、勇敢、自由、开心。希望你想做的事都能有回响，想去的地方都能抵达，想要的浪漫都能如期而至。\n\n未来还有很多个生日、很多张照片、很多次见面和很多段路，我都想陪你一起完成。\n\n敏君，愿你永远被爱包围。\n\n生日快乐，我最特别的女孩。", "secret_code": "20231123", "bg_music": "", "birthday_song": "", "timeline": [{"date": "2023.11.23", "text": "我们相识了", "detail": "从这一天开始，世界多了一份和敏君有关的心动。"}, {"date": "2024.05.20", "text": "把喜欢说得更认真", "detail": "想把每个浪漫的日子，都变成你被偏爱的证据。"}, {"date": "2025.11.23", "text": "又一年有你", "detail": "时间往前走，而我越来越确定：遇见你，是很幸运的事。"}, {"date": "2026.生日", "text": "二十岁的敏君", "detail": "愿你眼里有星河，心里有热爱，身边永远有我。"}]};</script>
 <script src="js/app.js" defer></script>
 </body>
 </html>

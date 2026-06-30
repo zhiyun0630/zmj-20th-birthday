@@ -2,122 +2,187 @@
     'use strict';
 
     const CONFIG = window.SITE_CONFIG || {};
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // ========== 工具函数 ==========
     function $(id) { return document.getElementById(id); }
 
-    function showToast(msg) {
+    function showToast(message) {
         const toast = $('toast');
-        toast.textContent = msg;
+        if (!toast) return;
+        toast.textContent = message;
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2500);
+        window.clearTimeout(showToast.timer);
+        showToast.timer = window.setTimeout(() => toast.classList.remove('show'), 2600);
     }
 
     function daysTogether(since) {
-        const start = new Date(since);
-        const now = new Date();
-        const diff = now - start;
-        return Math.floor(diff / (1000 * 60 * 60 * 24));
+        const start = new Date(`${since}T00:00:00`);
+        const today = new Date();
+        const current = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+        return Math.max(0, Math.floor((current - start) / 86400000) + 1);
     }
 
-    // ========== 星星背景 ==========
-    function createStars() {
-        const container = $('stars');
-        if (!container) return;
-        const count = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 15 : 50;
-        for (let i = 0; i < count; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 4 + 3;
-            star.style.cssText = `
-                left:${Math.random() * 100}%;
-                top:${Math.random() * 100}%;
-                width:${size}px;height:${size}px;
-                animation-delay:${Math.random() * 6}s;
-            `;
-            container.appendChild(star);
+    function launchConfetti(intense) {
+        if (typeof confetti !== 'function') return;
+        const colors = ['#ff5f9e', '#ff7eb3', '#ffd166', '#ffffff', '#ff9a8b'];
+        const count = intense ? 220 : 120;
+        confetti({ particleCount: count, spread: 90, origin: { x: 0.18, y: 0.68 }, colors });
+        confetti({ particleCount: count, spread: 90, origin: { x: 0.82, y: 0.68 }, colors });
+        window.setTimeout(() => confetti({ particleCount: intense ? 260 : 140, spread: 160, startVelocity: 38, origin: { y: 0.58 }, colors }), 260);
+    }
+
+    function initSparkCanvas() {
+        const canvas = $('sparkCanvas');
+        if (!canvas || reduceMotion) return;
+        const ctx = canvas.getContext('2d');
+        const sparks = [];
+        const total = Math.min(120, Math.floor(window.innerWidth / 10));
+        let width = 0;
+        let height = 0;
+
+        function resize() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = `${width}px`;
+            canvas.style.height = `${height}px`;
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
+
+        function createSpark() {
+            return {
+                x: Math.random() * width,
+                y: Math.random() * height,
+                r: Math.random() * 1.9 + 0.7,
+                vx: (Math.random() - 0.5) * 0.25,
+                vy: Math.random() * 0.28 + 0.08,
+                alpha: Math.random() * 0.55 + 0.25,
+                twinkle: Math.random() * Math.PI * 2
+            };
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+            sparks.forEach((spark) => {
+                spark.x += spark.vx;
+                spark.y += spark.vy;
+                spark.twinkle += 0.035;
+                if (spark.y > height + 10) {
+                    Object.assign(spark, createSpark(), { y: -10 });
+                }
+                const alpha = spark.alpha * (0.65 + Math.sin(spark.twinkle) * 0.35);
+                ctx.beginPath();
+                ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+                ctx.shadowColor = 'rgba(255,126,179,0.75)';
+                ctx.shadowBlur = 12;
+                ctx.arc(spark.x, spark.y, spark.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(draw);
+        }
+
+        resize();
+        for (let i = 0; i < total; i++) sparks.push(createSpark());
+        window.addEventListener('resize', resize);
+        draw();
     }
 
-    // ========== 飘落花瓣 ==========
-    function createPetals() {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        const emojis = ['🌸', '💗', '✨', '🩷'];
-        setInterval(() => {
-            const petal = document.createElement('div');
-            petal.className = 'petal';
-            petal.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-            petal.style.cssText = `
-                left:${Math.random() * 100}%;
-                font-size:${Math.random() * 10 + 12}px;
-                animation-duration:${Math.random() * 4 + 6}s;
-            `;
-            document.body.appendChild(petal);
-            petal.addEventListener('animationend', () => petal.remove());
-        }, 1200);
+    function initFloatingHearts() {
+        const container = $('floatingHearts');
+        if (!container || reduceMotion) return;
+        const symbols = ['♡', '✦', '✧', '❤', '❀'];
+        window.setInterval(() => {
+            const heart = document.createElement('span');
+            heart.className = 'heart';
+            heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.fontSize = `${Math.random() * 18 + 14}px`;
+            heart.style.opacity = `${Math.random() * 0.45 + 0.35}`;
+            heart.style.setProperty('--drift', `${(Math.random() - 0.5) * 160}px`);
+            heart.style.animationDuration = `${Math.random() * 5 + 7}s`;
+            container.appendChild(heart);
+            heart.addEventListener('animationend', () => heart.remove());
+        }, 760);
     }
 
-    // ========== 滚动显现 ==========
     function initReveal() {
         const els = document.querySelectorAll('.reveal');
+        if (!('IntersectionObserver' in window)) {
+            els.forEach(el => el.classList.add('visible'));
+            return;
+        }
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => {
-                if (e.isIntersecting) {
-                    e.target.classList.add('visible');
-                    observer.unobserve(e.target);
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.15 });
-        els.forEach(el => observer.observe(el));
+        }, { threshold: 0.16 });
+        els.forEach((el, index) => {
+            el.style.transitionDelay = `${Math.min(index % 4, 3) * 0.08}s`;
+            observer.observe(el);
+        });
     }
 
-    // ========== 在一起天数 ==========
     function initDaysCounter() {
         const el = $('daysCounter');
         if (!el || !CONFIG.together_since) return;
-        el.textContent = daysTogether(CONFIG.together_since);
+        const target = daysTogether(CONFIG.together_since);
+        if (reduceMotion) {
+            el.textContent = target;
+            return;
+        }
+        const duration = 1300;
+        const start = performance.now();
+        function tick(now) {
+            const progress = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            el.textContent = Math.floor(target * eased);
+            if (progress < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
     }
 
-    // ========== 时间线 ==========
     function initTimeline() {
-        const items = document.querySelectorAll('.timeline-item');
+        const items = Array.from(document.querySelectorAll('.timeline-item'));
         const detail = $('timelineDetail');
         if (!items.length || !detail) return;
 
-        items.forEach((item, i) => {
-            item.addEventListener('click', () => {
-                items.forEach(t => t.classList.remove('active'));
-                item.classList.add('active');
-                const events = CONFIG.timeline || [];
-                detail.textContent = events[i]?.detail || events[i]?.text || '';
-            });
-        });
-
-        if (items[0]) {
-            items[0].classList.add('active');
-            const first = (CONFIG.timeline || [])[0];
-            detail.textContent = first?.detail || first?.text || '';
+        function activate(index) {
+            items.forEach(item => item.classList.remove('active'));
+            items[index].classList.add('active');
+            const event = (CONFIG.timeline || [])[index] || {};
+            detail.style.opacity = '0';
+            window.setTimeout(() => {
+                detail.textContent = event.detail || event.text || '';
+                detail.style.opacity = '1';
+            }, 140);
         }
+
+        items.forEach((item, index) => item.addEventListener('click', () => activate(index)));
+        activate(0);
     }
 
-    // ========== 信封 ==========
-    let envelopeOpened = false;
+    function initIntro() {
+        const openCard = $('openCard');
+        const intro = $('intro');
+        const main = $('mainContent');
+        const musicBtn = $('musicBtn');
+        if (!openCard || !intro || !main) return;
 
-    function openEnvelope() {
-        if (envelopeOpened) return;
-        envelopeOpened = true;
-
-        $('envelope').classList.add('opened');
-
-        setTimeout(() => {
-            $('envelopeWrap').classList.add('hide');
-            $('mainContent').style.opacity = '1';
-            $('musicBtn').classList.add('visible');
+        openCard.addEventListener('click', () => {
+            intro.classList.add('hide');
+            main.classList.add('show');
+            musicBtn?.classList.add('visible');
+            launchConfetti(false);
             tryPlayMusic();
-        }, 800);
+            window.setTimeout(() => intro.remove(), 1000);
+        }, { once: true });
     }
 
-    // ========== 音乐 ==========
     let musicPlaying = false;
 
     function tryPlayMusic() {
@@ -133,7 +198,7 @@
     function toggleMusic() {
         const audio = $('bgMusic');
         if (!audio || !CONFIG.bg_music) {
-            showToast('可以在 config.json 里添加背景音乐 ♪');
+            showToast('把音乐放到 assets/music，并在 config.json 里填写路径就能播放啦');
             return;
         }
         if (musicPlaying) {
@@ -141,68 +206,111 @@
             musicPlaying = false;
         } else {
             audio.volume = 0.25;
-            audio.play().catch(() => showToast('点击页面后再试一次 ♪'));
-            musicPlaying = true;
+            audio.play().then(() => { musicPlaying = true; updateMusicBtn(); }).catch(() => showToast('再点击页面一次试试播放音乐'));
+            return;
         }
         updateMusicBtn();
     }
 
     function updateMusicBtn() {
         const btn = $('musicBtn');
+        if (!btn) return;
         btn.textContent = musicPlaying ? '🔊' : '🔇';
         btn.classList.toggle('playing', musicPlaying);
         btn.setAttribute('aria-label', musicPlaying ? '关闭音乐' : '播放音乐');
     }
 
-    // ========== 吹蜡烛 ==========
-    let blownCount = 0;
-    let totalCandles = 0;
+    function initGallery() {
+        const stage = $('photoStage');
+        const prev = $('photoPrev');
+        const next = $('photoNext');
+        const dots = $('photoDots');
+        if (!stage) return;
+        const cards = Array.from(stage.querySelectorAll('.photo-card'));
+        if (!cards.length) return;
 
-    function blowCandle(candle) {
-        if (candle.classList.contains('blown')) return;
-        candle.classList.add('blown');
-        blownCount++;
-        $('candleCount').textContent = totalCandles - blownCount;
-
-        if (blownCount === totalCandles) {
-            $('candleTip').textContent = '生日快乐！🎂 愿望一定会实现的';
-            launchConfetti();
-            playBirthdaySong();
+        function cardWidth() {
+            const first = cards[0];
+            const gap = parseFloat(getComputedStyle(stage).gap || '0');
+            return first.getBoundingClientRect().width + gap;
         }
+
+        function scrollByCard(direction) {
+            stage.scrollBy({ left: cardWidth() * direction, behavior: 'smooth' });
+        }
+
+        function updateDots() {
+            if (!dots) return;
+            const index = Math.round(stage.scrollLeft / cardWidth());
+            dots.querySelectorAll('.photo-dot').forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === index));
+        }
+
+        if (dots) {
+            cards.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `photo-dot${index === 0 ? ' active' : ''}`;
+                dot.setAttribute('aria-label', `查看第 ${index + 1} 张照片`);
+                dot.addEventListener('click', () => stage.scrollTo({ left: cardWidth() * index, behavior: 'smooth' }));
+                dots.appendChild(dot);
+            });
+        }
+
+        prev?.addEventListener('click', () => scrollByCard(-1));
+        next?.addEventListener('click', () => scrollByCard(1));
+        stage.addEventListener('scroll', () => window.requestAnimationFrame(updateDots), { passive: true });
     }
 
-    function launchConfetti() {
-        if (typeof confetti !== 'function') return;
-        const colors = ['#ff6b9d', '#ffd700', '#fff', '#ff8fab'];
-        confetti({ particleCount: 150, angle: 60, spread: 80, origin: { x: 0 }, colors });
-        confetti({ particleCount: 150, angle: 120, spread: 80, origin: { x: 1 }, colors });
-        setTimeout(() => confetti({ particleCount: 200, spread: 160, origin: { y: 0.6 }, colors }), 500);
+    let cakeDone = false;
+
+    function blowAllCandles() {
+        if (cakeDone) return;
+        cakeDone = true;
+        const candles = Array.from(document.querySelectorAll('.candle'));
+        const tip = $('candleTip');
+        const count = $('candleCount');
+        const button = $('blowAllBtn');
+        const wishCloud = $('wishCloud');
+
+        candles.forEach((candle, index) => {
+            window.setTimeout(() => candle.classList.add('blown'), index * 38);
+        });
+        if (count) count.textContent = '0';
+        if (button) {
+            button.textContent = '愿望已送达星星那里';
+            button.disabled = true;
+        }
+        window.setTimeout(() => {
+            if (tip) tip.textContent = '生日快乐！愿敏君的愿望全部实现。';
+            if (wishCloud) wishCloud.textContent = '二十岁的敏君，万事胜意，岁岁欢喜';
+            launchConfetti(true);
+            playBirthdaySong();
+            showToast('一口气吹灭啦，愿望一定会实现');
+        }, candles.length * 38 + 180);
     }
 
     function playBirthdaySong() {
         if (!CONFIG.birthday_song) return;
         const audio = new Audio(CONFIG.birthday_song);
-        audio.volume = 0.4;
+        audio.volume = 0.42;
         audio.play().catch(() => {});
     }
 
-    // ========== 打字机 ==========
     let typingStarted = false;
 
     function typeWriter() {
         if (typingStarted) return;
         typingStarted = true;
-
         const text = CONFIG.letter || '';
         const typedEl = $('typedText');
         const cursor = $('cursor');
-        let i = 0;
-
+        if (!typedEl) return;
+        let index = 0;
         function type() {
-            if (i < text.length) {
-                typedEl.textContent = text.substring(0, i + 1);
-                i++;
-                setTimeout(type, text[i - 1] === '\n' ? 280 : 45);
+            typedEl.textContent = text.slice(0, index + 1);
+            index++;
+            if (index < text.length) {
+                const prev = text[index - 1];
+                window.setTimeout(type, prev === '\n' ? 260 : 42);
             } else if (cursor) {
                 cursor.style.display = 'none';
             }
@@ -211,56 +319,71 @@
     }
 
     function initTypeWriter() {
-        const section = document.querySelector('.letter-section');
+        const section = $('letter');
         if (!section) return;
+        if (!('IntersectionObserver' in window)) {
+            typeWriter();
+            return;
+        }
         const observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting) {
                 typeWriter();
                 observer.disconnect();
             }
-        }, { threshold: 0.3 });
+        }, { threshold: 0.32 });
         observer.observe(section);
     }
 
-    // ========== 彩蛋 ==========
-    function checkSecret() {
-        const input = $('secretInput').value.trim();
-        if (input === CONFIG.secret_code) {
-            $('secretReveal').classList.add('show');
-            launchConfetti();
-        } else {
-            showToast('暗号不对哦，再想想~ 💭');
-            $('secretInput').classList.add('shake');
-            setTimeout(() => $('secretInput').classList.remove('shake'), 500);
+    function initSecret() {
+        const input = $('secretInput');
+        const btn = $('secretBtn');
+        const reveal = $('secretReveal');
+        if (!input || !btn || !reveal) return;
+
+        function checkSecret() {
+            const normalized = input.value.trim().replace(/[.\-/\s年月日]/g, '');
+            const code = String(CONFIG.secret_code || '').replace(/[.\-/\s年月日]/g, '');
+            if (normalized === code) {
+                reveal.classList.add('show');
+                launchConfetti(true);
+                showToast('解锁成功，这是只属于敏君的惊喜');
+            } else {
+                showToast('暗号不对哦，提示：我们的相识日期');
+                input.classList.add('shake');
+                window.setTimeout(() => input.classList.remove('shake'), 450);
+            }
         }
+
+        btn.addEventListener('click', checkSecret);
+        input.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') checkSecret();
+        });
     }
 
-    // ========== 初始化 ==========
+    function initGifts() {
+        document.querySelectorAll('.gift-box').forEach((box) => {
+            box.addEventListener('click', () => box.classList.toggle('opened'));
+        });
+    }
+
     function init() {
-        createStars();
-        createPetals();
+        initSparkCanvas();
+        initFloatingHearts();
         initReveal();
         initDaysCounter();
         initTimeline();
+        initIntro();
+        initGallery();
         initTypeWriter();
+        initSecret();
+        initGifts();
 
-        totalCandles = document.querySelectorAll('.candle').length;
-        if ($('candleCount')) $('candleCount').textContent = totalCandles;
+        $('musicBtn')?.addEventListener('click', toggleMusic);
+        $('surpriseBtn')?.addEventListener('click', () => launchConfetti(true));
+        $('blowAllBtn')?.addEventListener('click', blowAllCandles);
 
-        $('envelope').addEventListener('click', openEnvelope);
-        $('musicBtn').addEventListener('click', toggleMusic);
-        $('secretBtn').addEventListener('click', checkSecret);
-        $('secretInput').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') checkSecret();
-        });
-
-        document.querySelectorAll('.candle').forEach(c => {
-            c.addEventListener('click', () => blowCandle(c));
-        });
-
-        document.querySelectorAll('.gift-box').forEach(box => {
-            box.addEventListener('click', () => box.classList.toggle('opened'));
-        });
+        const count = document.querySelectorAll('.candle').length;
+        if ($('candleCount')) $('candleCount').textContent = count;
     }
 
     if (document.readyState === 'loading') {
