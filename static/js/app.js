@@ -225,9 +225,20 @@
         const prev = $('photoPrev');
         const next = $('photoNext');
         const dots = $('photoDots');
+        const progress = $('galleryProgress');
+        const playBtn = $('playGalleryBtn');
+        const lightbox = $('photoLightbox');
+        const lightboxImg = $('lightboxImg');
+        const lightboxCaption = $('lightboxCaption');
+        const lightboxClose = $('lightboxClose');
+        const lightboxPrev = $('lightboxPrev');
+        const lightboxNext = $('lightboxNext');
         if (!stage) return;
         const cards = Array.from(stage.querySelectorAll('.photo-card'));
         if (!cards.length) return;
+        let currentIndex = 0;
+        let playing = false;
+        let playTimer = 0;
 
         function cardWidth() {
             const first = cards[0];
@@ -235,14 +246,71 @@
             return first.getBoundingClientRect().width + gap;
         }
 
-        function scrollByCard(direction) {
-            stage.scrollBy({ left: cardWidth() * direction, behavior: 'smooth' });
+        function scrollToIndex(index, behavior = 'smooth') {
+            const max = cards.length - 1;
+            currentIndex = Math.max(0, Math.min(max, index));
+            stage.scrollTo({ left: cardWidth() * currentIndex, behavior });
+            updateUI(currentIndex);
         }
 
-        function updateDots() {
-            if (!dots) return;
+        function scrollByCard(direction) {
+            scrollToIndex(currentIndex + direction);
+        }
+
+        function updateUI(index) {
+            currentIndex = Math.max(0, Math.min(cards.length - 1, index));
+            if (progress) progress.textContent = `${String(currentIndex + 1).padStart(2, '0')} / ${String(cards.length).padStart(2, '0')}`;
+            if (dots) {
+                dots.querySelectorAll('.photo-dot').forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === currentIndex));
+            }
+        }
+
+        function updateFromScroll() {
             const index = Math.round(stage.scrollLeft / cardWidth());
-            dots.querySelectorAll('.photo-dot').forEach((dot, dotIndex) => dot.classList.toggle('active', dotIndex === index));
+            updateUI(index);
+        }
+
+        function startPlayback() {
+            if (playing) {
+                playing = false;
+                window.clearTimeout(playTimer);
+                if (playBtn) playBtn.textContent = '播放照片故事';
+                return;
+            }
+            playing = true;
+            if (playBtn) playBtn.textContent = '暂停播放';
+            let index = currentIndex;
+            const step = () => {
+                if (!playing) return;
+                scrollToIndex(index);
+                index = index >= cards.length - 1 ? 0 : index + 1;
+                playTimer = window.setTimeout(step, 1450);
+            };
+            step();
+        }
+
+        function openLightbox(index) {
+            if (!lightbox || !lightboxImg || !lightboxCaption) return;
+            currentIndex = Math.max(0, Math.min(cards.length - 1, index));
+            const card = cards[currentIndex];
+            lightboxImg.src = card.dataset.src || card.querySelector('img')?.src || '';
+            lightboxCaption.textContent = card.dataset.caption || '';
+            lightbox.classList.add('show');
+            lightbox.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            if (!lightbox) return;
+            lightbox.classList.remove('show');
+            lightbox.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        function moveLightbox(direction) {
+            const nextIndex = (currentIndex + direction + cards.length) % cards.length;
+            openLightbox(nextIndex);
+            scrollToIndex(nextIndex);
         }
 
         if (dots) {
@@ -250,14 +318,40 @@
                 const dot = document.createElement('button');
                 dot.className = `photo-dot${index === 0 ? ' active' : ''}`;
                 dot.setAttribute('aria-label', `查看第 ${index + 1} 张照片`);
-                dot.addEventListener('click', () => stage.scrollTo({ left: cardWidth() * index, behavior: 'smooth' }));
+                dot.addEventListener('click', () => scrollToIndex(index));
                 dots.appendChild(dot);
             });
         }
 
+        if ('IntersectionObserver' in window) {
+            const cardObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { root: stage, threshold: 0.18 });
+            cards.forEach(card => cardObserver.observe(card));
+        } else {
+            cards.forEach(card => card.classList.add('visible'));
+        }
+
         prev?.addEventListener('click', () => scrollByCard(-1));
         next?.addEventListener('click', () => scrollByCard(1));
-        stage.addEventListener('scroll', () => window.requestAnimationFrame(updateDots), { passive: true });
+        playBtn?.addEventListener('click', startPlayback);
+        stage.addEventListener('scroll', () => window.requestAnimationFrame(updateFromScroll), { passive: true });
+        cards.forEach((card, index) => card.addEventListener('click', () => openLightbox(index)));
+        lightboxClose?.addEventListener('click', closeLightbox);
+        lightboxPrev?.addEventListener('click', () => moveLightbox(-1));
+        lightboxNext?.addEventListener('click', () => moveLightbox(1));
+        lightbox?.addEventListener('click', (event) => {
+            if (event.target === lightbox) closeLightbox();
+        });
+        document.addEventListener('keydown', (event) => {
+            if (!lightbox?.classList.contains('show')) return;
+            if (event.key === 'Escape') closeLightbox();
+            if (event.key === 'ArrowLeft') moveLightbox(-1);
+            if (event.key === 'ArrowRight') moveLightbox(1);
+        });
+        updateUI(0);
     }
 
     let cakeDone = false;

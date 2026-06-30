@@ -35,7 +35,7 @@
         <p class="reveal overline">Since 2023.11.23</p>
         <h1 class="reveal hero-title">
             <span class="eng-handwrite">Happy 20th Birthday</span>
-            <strong class="handwrite">敏君</strong>
+            <strong class="handwrite">赵敏君</strong>
         </h1>
         <p class="reveal hero-copy">{{ subtitle }}<br>我把想说的话、一起走过的时间、还有未来的浪漫，都藏进了这里。</p>
         <div class="reveal hero-actions">
@@ -48,7 +48,7 @@
                 <small>天相识相伴</small>
             </div>
             <div>
-                <span>10</span>
+                <span>40</span>
                 <small>张照片位置</small>
             </div>
             <div>
@@ -74,8 +74,12 @@
     <section class="section gallery-section" id="gallery">
         <div class="section-heading reveal">
             <p class="overline">Photo Gallery</p>
-            <h2 class="handwrite">十个心动瞬间</h2>
-            <span>我先预留了 10 张照片的位置，把图片放进 assets/photos 后就能替换。</span>
+            <h2 class="handwrite">四十个心动瞬间</h2>
+            <span>照片会像记忆胶片一样依次登场，点击任意一张可以放大查看。</span>
+        </div>
+        <div class="gallery-toolbar reveal">
+            <button class="primary-btn compact" id="playGalleryBtn">播放照片故事</button>
+            <span id="galleryProgress">01 / 40</span>
         </div>
         <div class="gallery-shell reveal">
             <button class="gallery-nav prev" id="photoPrev" aria-label="上一张照片">‹</button>
@@ -85,6 +89,15 @@
             <button class="gallery-nav next" id="photoNext" aria-label="下一张照片">›</button>
         </div>
         <div class="photo-dots reveal" id="photoDots"></div>
+        <div class="photo-lightbox" id="photoLightbox" aria-hidden="true">
+            <button class="lightbox-close" id="lightboxClose" aria-label="关闭照片预览">×</button>
+            <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="上一张大图">‹</button>
+            <figure>
+                <img id="lightboxImg" alt="放大的照片">
+                <figcaption id="lightboxCaption"></figcaption>
+            </figure>
+            <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="下一张大图">›</button>
+        </div>
     </section>
 
     <section class="section cake-section" id="cake">
@@ -94,7 +107,7 @@
             <span>闭上眼睛，点击按钮，一口气吹灭所有蜡烛。</span>
         </div>
         <div class="cake-scene reveal">
-            <div class="wish-cloud" id="wishCloud">愿你的 20 岁，被鲜花、星光和爱包围</div>
+            <div class="wish-cloud" id="wishCloud">愿你的 20 岁，被温暖、星光和爱包围</div>
             <div class="cake" id="cakeArt">
                 <div class="candles" id="candles">{{ candles_html }}</div>
                 <div class="cream cream-back"></div>
