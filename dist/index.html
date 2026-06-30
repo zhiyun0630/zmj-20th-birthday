@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Happy 20th Birthday ♡">
+    <meta name="theme-color" content="#ff9a9e">
+    <title>Happy 20th Birthday ♡</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js" defer></script>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="toast" id="toast"></div>
+
+<!-- 信封入场 -->
+<div class="envelope-wrap" id="envelopeWrap">
+    <div class="envelope" id="envelope" role="button" aria-label="拆开信封">
+        <div class="envelope-flap"></div>
+        <div class="envelope-body">
+            <p>致 20 岁的你 ♡</p>
+            <span>点击拆开信封</span>
+        </div>
+    </div>
+</div>
+
+<div id="mainContent" style="opacity:0; transition:opacity 1s ease 0.5s;">
+
+    <!-- 主标题 -->
+    <section class="section">
+        <div class="reveal eng-handwrite" style="font-size:clamp(2.5rem,8vw,4.5rem); color:white; text-shadow:0 2px 12px rgba(0,0,0,0.15); margin-bottom:1rem;">
+            Happy 20th Birthday
+        </div>
+        <h1 class="reveal handwrite" style="font-size:clamp(1.8rem,6vw,3rem); color:#e64980; margin:0 0 1.5rem; transition-delay:0.15s;">
+            亲爱的某某：
+        </h1>
+        <p class="reveal" style="font-size:1.1rem; color:rgba(214,51,108,0.85); text-align:center; max-width:28rem; line-height:1.8; transition-delay:0.3s;">
+            欢迎来到属于你的二十岁世界<br>慢慢往下滑，有我准备的惊喜
+        </p>
+        <div class="reveal days-badge" style="transition-delay:0.45s;">
+            我们已经在一起 <strong id="daysCounter">0</strong> 天啦 ♡
+        </div>
+        <div class="scroll-hint">↓</div>
+    </section>
+
+    <!-- 时间线 -->
+    <section class="section">
+        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">我们的故事</h2>
+        <p class="reveal" style="color:rgba(214,51,108,0.7); margin-bottom:0; transition-delay:0.1s;">每一个与你有关的日子，都闪闪发光</p>
+
+        <div class="timeline reveal" style="transition-delay:0.2s;">
+            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2023.09.10</div><div class="timeline-text">第一次遇见你</div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2023.11.25</div><div class="timeline-text">我们在一起了</div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2024.05.20</div><div class="timeline-text">第一次旅行</div></div>
+            <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-date">2025.01.01</div><div class="timeline-text">一起跨年</div></div>
+        </div>
+        <div class="timeline-detail reveal" id="timelineDetail" style="transition-delay:0.3s;"></div>
+    </section>
+
+    <!-- 照片墙 -->
+    <section class="section">
+        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">我们的瞬间</h2>
+        <p class="reveal" style="color:rgba(214,51,108,0.7); margin-bottom:0; transition-delay:0.1s;">左右滑动，回顾那些美好</p>
+        <div class="photo-scroll reveal" style="transition-delay:0.2s;">
+            <div class="photo-card"><img src="assets/photos/photo1.jpg" alt="我们的第一张合照" loading="lazy"><p>我们的第一张合照</p></div>
+            <div class="photo-card"><img src="assets/photos/photo2.jpg" alt="一起看过的日落" loading="lazy"><p>一起看过的日落</p></div>
+            <div class="photo-card"><img src="assets/photos/photo3.jpg" alt="最日常也最珍贵的瞬间" loading="lazy"><p>最日常也最珍贵的瞬间</p></div>
+        </div>
+    </section>
+
+    <!-- 生日蛋糕 -->
+    <section class="section">
+        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">许下心愿吧</h2>
+        <p class="reveal" style="color:rgba(214,51,108,0.7); transition-delay:0.1s;">点击蜡烛，一根根吹灭它们 ✨</p>
+        <p class="reveal" style="font-size:0.875rem; color:rgba(214,51,108,0.5); margin:0.5rem 0 1.5rem; transition-delay:0.15s;" id="candleTip">
+            剩余蜡烛：<span id="candleCount">20</span> 根
+        </p>
+        <div class="cake reveal" style="transition-delay:0.2s;">
+            <div class="candles" id="candles"><div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div>
+                <div class="candle"><div class="flame"></div></div></div>
+            <div class="cake-top"></div>
+            <div class="cake-body"></div>
+        </div>
+    </section>
+
+    <!-- 情话盲盒 -->
+    <section class="section">
+        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">情话盲盒</h2>
+        <p class="reveal" style="color:rgba(214,51,108,0.7); margin-bottom:0; transition-delay:0.1s;">点开每一个盒子，都是我想对你说的话</p>
+        <div class="gift-grid reveal" style="transition-delay:0.2s;">
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">遇见你，是我最幸运的事</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">想和你吃遍全世界的甜品</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">你的二十岁，我奉陪到底</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">你不用长高，我会弯腰</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">🎁</div><div class="gift-back">岁岁年年，万喜万般宜</div></div></div>
+            <div class="gift-box"><div class="gift-inner"><div class="gift-front">💝</div><div class="gift-back">我爱你，不止今天</div></div></div>
+        </div>
+    </section>
+
+    <!-- 告白信 -->
+    <section class="section letter-section">
+        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 2rem;">写给二十岁的你</h2>
+        <div class="letter reveal" style="transition-delay:0.15s;">
+            <div class="letter-content handwrite">
+                <span id="typedText"></span><span class="cursor" id="cursor"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 彩蛋 -->
+    <section class="section">
+        <h2 class="reveal handwrite" style="font-size:clamp(1.8rem,5vw,2.5rem); color:#e64980; margin:0 0 0.5rem;">最后一个彩蛋</h2>
+        <p class="reveal" style="color:rgba(214,51,108,0.7); margin-bottom:1.5rem; transition-delay:0.1s;">输入我们的暗号，解锁隐藏惊喜</p>
+
+        <div class="secret-input-wrap reveal" style="transition-delay:0.2s;">
+            <input type="text" id="secretInput" placeholder="比如我们的纪念日..." autocomplete="off">
+            <button id="secretBtn">确认</button>
+        </div>
+
+        <div class="secret-reveal" id="secretReveal">
+            <p style="color:#e64980; font-size:1.1rem; margin:0;">🎉 恭喜你解锁专属惊喜！</p>
+            <p style="color:#555; margin:12px 0; line-height:1.7;">今晚 7 点，老地方见 —— 我准备了更多惊喜给你 ♡</p>
+            <img src="assets/photos/surprise.jpg" alt="专属惊喜" loading="lazy"
+                 onerror="this.style.display='none'">
+        </div>
+
+        <div class="footer-text">♡ 二十岁生日快乐，愿你永远被爱 ♡</div>
+    </section>
+
+</div>
+
+<button class="music-btn" id="musicBtn" aria-label="播放音乐">🔇</button>
+
+<audio id="bgMusic" loop preload="none"></audio>
+
+<script>window.SITE_CONFIG = {"together_since": "2023-11-25", "letter": "亲爱的宝贝：\n\n展信佳。\n\n今天是你的二十岁生日，也是我陪你过的第 N 个生日。\n\n二十岁是很美好的年纪，有热烈的梦想，有未知的远方，而我最幸运的是，能站在你身边，陪你一起走。\n\n希望你永远快乐，永远勇敢，永远可以做最真实的自己。而我，会一直是你最坚实的后盾。\n\n生日快乐，我的女孩。\n\n爱你的某某\n2026 年 生日当天", "secret_code": "20231125", "bg_music": "", "birthday_song": "", "timeline": [{"date": "2023.09.10", "text": "第一次遇见你", "detail": "那天的阳光很好，而你更好。"}, {"date": "2023.11.25", "text": "我们在一起了", "detail": "从那天起，我的日历里多了无数个值得纪念的日子。"}, {"date": "2024.05.20", "text": "第一次旅行", "detail": "和你一起看过的风景，都成了心底最柔软的记忆。"}, {"date": "2025.01.01", "text": "一起跨年", "detail": "零点的那一秒，我许的愿望里都有你。"}]};</script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

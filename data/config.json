@@ -1,0 +1,35 @@
+{
+  "her_name": "某某",
+  "my_name": "某某",
+  "envelope_title": "致 20 岁的你 ♡",
+  "subtitle": "欢迎来到属于你的二十岁世界",
+  "together_since": "2023-11-25",
+  "candle_count": 20,
+  "timeline": [
+    { "date": "2023.09.10", "text": "第一次遇见你", "detail": "那天的阳光很好，而你更好。" },
+    { "date": "2023.11.25", "text": "我们在一起了", "detail": "从那天起，我的日历里多了无数个值得纪念的日子。" },
+    { "date": "2024.05.20", "text": "第一次旅行", "detail": "和你一起看过的风景，都成了心底最柔软的记忆。" },
+    { "date": "2025.01.01", "text": "一起跨年", "detail": "零点的那一秒，我许的愿望里都有你。" }
+  ],
+  "photos": [
+    { "src": "assets/photos/photo1.jpg", "caption": "我们的第一张合照" },
+    { "src": "assets/photos/photo2.jpg", "caption": "一起看过的日落" },
+    { "src": "assets/photos/photo3.jpg", "caption": "最日常也最珍贵的瞬间" }
+  ],
+  "gifts": [
+    { "emoji": "🎁", "text": "遇见你，是我最幸运的事" },
+    { "emoji": "🎁", "text": "想和你吃遍全世界的甜品" },
+    { "emoji": "🎁", "text": "你的二十岁，我奉陪到底" },
+    { "emoji": "🎁", "text": "你不用长高，我会弯腰" },
+    { "emoji": "🎁", "text": "岁岁年年，万喜万般宜" },
+    { "emoji": "💝", "text": "我爱你，不止今天" }
+  ],
+  "letter": "亲爱的宝贝：\n\n展信佳。\n\n今天是你的二十岁生日，也是我陪你过的第 N 个生日。\n\n二十岁是很美好的年纪，有热烈的梦想，有未知的远方，而我最幸运的是，能站在你身边，陪你一起走。\n\n希望你永远快乐，永远勇敢，永远可以做最真实的自己。而我，会一直是你最坚实的后盾。\n\n生日快乐，我的女孩。\n\n爱你的某某\n2026 年 生日当天",
+  "secret_code": "20231125",
+  "secret_hint": "比如我们的纪念日...",
+  "secret_title": "🎉 恭喜你解锁专属惊喜！",
+  "secret_message": "今晚 7 点，老地方见 —— 我准备了更多惊喜给你 ♡",
+  "secret_image": "assets/photos/surprise.jpg",
+  "bg_music": "",
+  "birthday_song": ""
+}
