@@ -183,6 +183,14 @@ def build() -> Path:
     if assets_src.exists():
         shutil.copytree(assets_src, DIST / "assets", dirs_exist_ok=True)
 
+    bg_music = config.get("bg_music", "")
+    if bg_music:
+        music_src = ROOT / bg_music
+        music_dest = DIST / bg_music
+        if music_src.exists():
+            music_dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(music_src, music_dest)
+
     photos = build_photo_items(config)
 
     js_config = {
